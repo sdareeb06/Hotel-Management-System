@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="flex h-screen bg-[#F7F8FA] text-[#0B172A] overflow-hidden font-sans selection:bg-[#0A172C] selection:text-[#FFFFFF]">
+    <div className="flex h-screen w-screen bg-[#F8FAFC] text-[#0B172A] overflow-hidden font-sans selection:bg-[#0A172C] selection:text-[#FFFFFF]">
       
       {/* Desktop Sidebar (lg and above) */}
       <aside className="hidden lg:flex w-64 bg-[#0A172C] border-r border-[#0A172C] flex-col justify-between shrink-0 z-30 shadow-xl text-white">
@@ -104,15 +104,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* Mobile Drawer (screens below lg) */}
+      {/* Mobile Sidebar Overlay Drawer */}
       {mobileSidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          {/* Overlay backdrop */}
           <div 
             className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileSidebarOpen(false)}
           />
-          {/* Drawer Content */}
           <div className="relative w-72 bg-[#0A172C] text-white flex flex-col justify-between z-50 h-full shadow-2xl">
             <div className="flex flex-col">
               <div className="p-5 border-b border-white/10 flex items-center justify-between">
@@ -124,13 +122,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </Link>
                 <button 
                   onClick={() => setMobileSidebarOpen(false)} 
-                  className="p-1.5 rounded-full text-white/70 hover:text-white"
+                  className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <nav className="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)]">
+              <nav className="p-3 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)]">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
@@ -139,7 +137,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileSidebarOpen(false)}
-                      className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
                         isActive
                           ? 'bg-white text-[#0A172C] font-bold shadow-md'
                           : 'text-white/80 hover:bg-white/10'
@@ -157,7 +155,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 href="/"
                 onClick={() => setMobileSidebarOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 text-xs font-bold text-white text-center"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 text-xs font-bold text-white text-center cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Public Website</span>
@@ -167,28 +165,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       )}
 
-      {/* Main SaaS Workspace */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {/* Main SaaS Workspace Container */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         
         {/* Top Header Bar */}
-        <header className="h-16 bg-white border-b border-[#CBD5E1] px-4 sm:px-6 flex items-center justify-between shrink-0 shadow-sm gap-3">
+        <header className="h-16 bg-white border-b border-[#CBD5E1] px-4 sm:px-6 flex items-center justify-between shrink-0 shadow-sm gap-2 sm:gap-4 z-20">
           
-          {/* Mobile Hamburger Toggle */}
+          {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileSidebarOpen(true)}
-            className="lg:hidden p-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0A172C] hover:bg-[#CBD5E1]/40"
-            aria-label="Toggle Navigation Drawer"
+            className="lg:hidden p-2.5 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-[#0A172C] hover:bg-[#CBD5E1]/40 shrink-0 cursor-pointer"
+            aria-label="Toggle Mobile Navigation Menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           {/* Search Input */}
-          <div className="relative max-w-md w-full">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#667085]" />
+          <div className="relative max-w-[180px] sm:max-w-md w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#667085]" />
             <input
               type="text"
-              placeholder="Search reservations, rooms, guests..."
-              className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl pl-9 pr-3 sm:pl-10 sm:pr-4 py-2 text-xs text-[#0F172A] placeholder-[#667085] focus:border-[#0A172C] outline-none"
+              placeholder="Search admin..."
+              className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl pl-9 pr-3 sm:pl-10 sm:pr-4 py-1.5 sm:py-2 text-xs text-[#0F172A] placeholder-[#667085] focus:border-[#0A172C] outline-none"
             />
           </div>
 
