@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #07111F;
+    --bg-card: #0B1F3A;
+    --accent-blue: #123B70;
+    --gold-primary: #C8A96B;
+    --text-cream: #F5F1E8;
+    --text-muted: #8B96A8;
+  }
+
+  body {
+    background-color: #07111F;
+    color: #F5F1E8;
+    font-family: var(--font-inter), sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-serif-heading {
+    font-family: var(--font-cormorant), 'Playfair Display', serif;
+  }
+}
+
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07111F;
+}
+::-webkit-scrollbar-thumb {
+  background: #123B70;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C8A96B;
+}
+
+/* Glassmorphism & Micro Utilities */
+.glass-panel {
+  background: rgba(11, 31, 58, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(200, 169, 107, 0.2);
+}
+
+.glass-panel-gold {
+  background: rgba(11, 31, 58, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(200, 169, 107, 0.35);
+  box-shadow: 0 20px 50px rgba(7, 17, 31, 0.8);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #F5F1E8 0%, #C8A96B 50%, #E8D49B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #C8A96B 0%, #A68848 100%);
+}
+
+.gold-border-glow {
+  box-shadow: 0 0 25px rgba(200, 169, 107, 0.25);
+}
+
+/* Hide scrollbar for clean horizontal scroll sections */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
