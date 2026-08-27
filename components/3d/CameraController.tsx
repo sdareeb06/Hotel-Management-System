@@ -11,17 +11,18 @@ interface CameraControllerProps {
   isInteractiveMode: boolean;
 }
 
-// 3D Spatial Fly-Through Keyframes positioned to frame resort on right/center without colliding with left text cards
+// 3D Architectural Trajectory: Offset target (X = 4.5 to 6.0) so 3D model stays framed on the RIGHT HALF of the viewport
+// Left half remains completely clear for text cards with zero overlapping!
 const SCROLL_KEYFRAMES = [
-  { progress: 0.00, pos: new THREE.Vector3(16, 9, 22), target: new THREE.Vector3(-2, 2.5, 0) },
-  { progress: 0.12, pos: new THREE.Vector3(8, 4.5, 16), target: new THREE.Vector3(-3, 2.0, 0) },
-  { progress: 0.25, pos: new THREE.Vector3(-16, 9, 20), target: new THREE.Vector3(4, 3.0, 0) },
-  { progress: 0.38, pos: new THREE.Vector3(14, 10, 18), target: new THREE.Vector3(-2, 3.5, 0) },
-  { progress: 0.50, pos: new THREE.Vector3(-12, 8, 14), target: new THREE.Vector3(3, 4.5, 0) },
-  { progress: 0.65, pos: new THREE.Vector3(12, 11, 14), target: new THREE.Vector3(-3, 5.0, 0) },
-  { progress: 0.78, pos: new THREE.Vector3(14, 6, -8), target: new THREE.Vector3(0, 2.0, -2) },
-  { progress: 0.90, pos: new THREE.Vector3(-16, 12, 18), target: new THREE.Vector3(2, 3.0, 0) },
-  { progress: 1.00, pos: new THREE.Vector3(0, 16, 24), target: new THREE.Vector3(0, 2.0, 0) }
+  { progress: 0.00, pos: new THREE.Vector3(18, 9, 20), target: new THREE.Vector3(5.0, 3.0, 0) },
+  { progress: 0.12, pos: new THREE.Vector3(10, 4.5, 14), target: new THREE.Vector3(4.0, 2.0, 0) },
+  { progress: 0.25, pos: new THREE.Vector3(-14, 9, 18), target: new THREE.Vector3(6.0, 3.5, 0) },
+  { progress: 0.38, pos: new THREE.Vector3(15, 11, 16), target: new THREE.Vector3(5.0, 4.0, 0) },
+  { progress: 0.50, pos: new THREE.Vector3(-12, 8, 14), target: new THREE.Vector3(5.5, 4.5, 0) },
+  { progress: 0.65, pos: new THREE.Vector3(14, 11, 14), target: new THREE.Vector3(4.5, 5.0, 0) },
+  { progress: 0.78, pos: new THREE.Vector3(15, 6, -8), target: new THREE.Vector3(5.0, 2.0, -2) },
+  { progress: 0.90, pos: new THREE.Vector3(-15, 12, 16), target: new THREE.Vector3(5.5, 3.0, 0) },
+  { progress: 1.00, pos: new THREE.Vector3(12, 15, 22), target: new THREE.Vector3(4.0, 3.0, 0) }
 ];
 
 export default function CameraController({
@@ -30,9 +31,9 @@ export default function CameraController({
   isInteractiveMode
 }: CameraControllerProps) {
   const { camera } = useThree();
-  const currentTarget = useRef(new THREE.Vector3(0, 2.0, 0));
-  const desiredPos = useRef(new THREE.Vector3(16, 9, 22));
-  const desiredTarget = useRef(new THREE.Vector3(-2, 2.5, 0));
+  const currentTarget = useRef(new THREE.Vector3(5.0, 3.0, 0));
+  const desiredPos = useRef(new THREE.Vector3(18, 9, 20));
+  const desiredTarget = useRef(new THREE.Vector3(5.0, 3.0, 0));
 
   useEffect(() => {
     if (activeHotspot) {
@@ -61,12 +62,11 @@ export default function CameraController({
   useFrame((state, delta) => {
     if (isInteractiveMode && !activeHotspot) return;
 
-    // Optimized camera lerp damping for smooth 60fps performance
-    const damping = Math.min(1, delta * 4.0);
+    const damping = Math.min(1, delta * 4.5);
 
     const time = state.clock.getElapsedTime();
-    const bobY = Math.sin(time * 0.5) * 0.08;
-    const bobX = Math.cos(time * 0.3) * 0.05;
+    const bobY = Math.sin(time * 0.5) * 0.06;
+    const bobX = Math.cos(time * 0.3) * 0.04;
 
     const tempPos = desiredPos.current.clone();
     tempPos.y += bobY;

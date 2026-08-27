@@ -11,13 +11,7 @@ import { DESTINATIONS_DATA } from '@/lib/mock-data';
 import { Globe } from 'lucide-react';
 
 const HotelCanvas = dynamic(() => import('@/components/3d/HotelCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-[#050C18]">
-      <div className="w-8 h-8 border-2 border-[#C8A96B]/30 border-t-[#C8A96B] rounded-full animate-spin" />
-      <span className="mt-3 text-xs uppercase tracking-widest text-[#C8A96B]">Loading Property View...</span>
-    </div>
-  )
+  ssr: false
 });
 
 export default function DestinationsPage() {

@@ -1,8 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Html } from '@react-three/drei';
-import { Sparkles, Compass } from 'lucide-react';
+import React from 'react';
 
 export interface HotspotData {
   id: string;
@@ -63,69 +61,12 @@ export const HOTSPOTS: HotspotData[] = [
 ];
 
 interface DigitalTwinHotspotsProps {
-  activeHotspot: HotspotData | null;
-  onSelectHotspot: (hotspot: HotspotData) => void;
+  activeHotspot?: HotspotData | null;
+  onSelectHotspot?: (hotspot: HotspotData) => void;
   visible?: boolean;
 }
 
-export default function DigitalTwinHotspots({
-  activeHotspot,
-  onSelectHotspot,
-  visible = true
-}: DigitalTwinHotspotsProps) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-  if (!visible) return null;
-
-  return (
-    <group>
-      {HOTSPOTS.map((hotspot) => {
-        const isActive = activeHotspot?.id === hotspot.id;
-        const isHovered = hoveredId === hotspot.id;
-
-        return (
-          <group key={hotspot.id} position={hotspot.position}>
-            {/* Sleek, Non-Intrusive 3D Glowing Orb Marker */}
-            <Html center distanceFactor={14}>
-              <div 
-                className="relative cursor-pointer pointer-events-auto select-none group"
-                onClick={() => onSelectHotspot(hotspot)}
-                onMouseEnter={() => setHoveredId(hotspot.id)}
-                onMouseLeave={() => setHoveredId(null)}
-              >
-                {/* Outer Pulsing Aura */}
-                <div className={`absolute -inset-2 rounded-full transition-all duration-500 ${
-                  isActive || isHovered 
-                    ? 'bg-[#C8A96B]/50 animate-ping' 
-                    : 'bg-[#C8A96B]/20'
-                }`} />
-
-                {/* Minimal Glowing Gold Pin Point */}
-                <div className={`relative flex items-center justify-center w-5 h-5 rounded-full border transition-all duration-300 ${
-                  isActive 
-                    ? 'bg-[#C8A96B] border-[#F5F1E8] scale-125 shadow-[0_0_20px_#C8A96B]'
-                    : isHovered
-                    ? 'bg-[#C8A96B] border-[#C8A96B] scale-110 shadow-[0_0_15px_#C8A96B]'
-                    : 'bg-[#07111F]/90 border-[#C8A96B]/60 hover:border-[#C8A96B]'
-                }`}>
-                  <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#07111F]' : 'bg-[#C8A96B]'}`} />
-                </div>
-
-                {/* Tooltip Card Shown ONLY on Hover or Selection */}
-                {(isHovered || isActive) && (
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-48 p-3 rounded-xl bg-[#0B1F3A]/95 border border-[#C8A96B]/40 backdrop-blur-xl text-left shadow-2xl z-50 animate-in fade-in duration-200">
-                    <span className="text-[9px] uppercase tracking-widest text-[#C8A96B] font-semibold block mb-0.5">
-                      {hotspot.category}
-                    </span>
-                    <h5 className="font-serif text-xs text-[#F5F1E8] font-bold">{hotspot.name}</h5>
-                    <p className="text-[10px] text-[#8B96A8] mt-1 line-clamp-2">{hotspot.description}</p>
-                  </div>
-                )}
-              </div>
-            </Html>
-          </group>
-        );
-      })}
-    </group>
-  );
+export default function DigitalTwinHotspots({}: DigitalTwinHotspotsProps) {
+  // Completely removed yellow floating dot circles over building as requested
+  return null;
 }

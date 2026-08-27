@@ -19,295 +19,199 @@ export default function SapphireArchitecturalResort({ onLoaded }: SapphireArchit
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
+    
+    // Smooth 360-degree continuous rotation orbit
+    if (groupRef.current) {
+      groupRef.current.rotation.y = time * 0.06;
+    }
+
     if (poolWaterRef.current) {
-      poolWaterRef.current.position.y = 12.35 + Math.sin(time * 1.8) * 0.02;
+      poolWaterRef.current.position.y = 14.3 + Math.sin(time * 1.5) * 0.02;
     }
     if (fountainRef.current) {
-      fountainRef.current.scale.y = 1 + Math.sin(time * 3) * 0.15;
+      fountainRef.current.scale.y = 1 + Math.sin(time * 2.5) * 0.12;
     }
   });
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       
-      {/* ═══════ 1. GROUND PLAZA & LANDSCAPE ═══════ */}
-      {/* Polished ground deck */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
-        <planeGeometry args={[80, 80]} />
-        <meshStandardMaterial color="#040A14" roughness={0.2} metalness={0.8} />
+      {/* ═══════ 1. GROUND PLAZA & APPROACH ═══════ */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
+        <planeGeometry args={[90, 90]} />
+        <meshStandardMaterial color="#040914" roughness={0.3} metalness={0.7} />
       </mesh>
 
       {/* Subtle architectural floor grid */}
-      <gridHelper args={[80, 40, '#0B1F3A', '#07111F']} position={[0, 0.01, 0]} />
+      <gridHelper args={[90, 45, '#0B1320', '#061120']} position={[0, 0.01, 0]} />
 
-      {/* Driveway approach path */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 12]}>
-        <planeGeometry args={[6, 16]} />
-        <meshStandardMaterial color="#0B1F3A" roughness={0.3} metalness={0.6} />
+      {/* Entrance driveway */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 14]}>
+        <planeGeometry args={[7, 18]} />
+        <meshStandardMaterial color="#0B1320" roughness={0.4} metalness={0.5} />
       </mesh>
-      {/* Driveway gold edge lines */}
-      {[-3, 3].map((x, idx) => (
-        <mesh key={`drive-${idx}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.03, 12]}>
-          <planeGeometry args={[0.08, 16]} />
-          <meshStandardMaterial color="#C8A96B" emissive="#C8A96B" emissiveIntensity={0.8} />
+      
+      {/* Gold boundary strips */}
+      {[-3.5, 3.5].map((x, idx) => (
+        <mesh key={`drive-edge-${idx}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.03, 14]}>
+          <planeGeometry args={[0.08, 18]} />
+          <meshBasicMaterial color="#D4AF37" />
         </mesh>
-      ))}
-
-      {/* Garden landscape patches */}
-      {[
-        [-12, 0.05, 5], [12, 0.05, 5], [-12, 0.05, -5], [12, 0.05, -5],
-        [-15, 0.05, 0], [15, 0.05, 0]
-      ].map((pos, idx) => (
-        <mesh key={`garden-${idx}`} position={pos as [number, number, number]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[2.5, 32]} />
-          <meshStandardMaterial color="#0A2215" roughness={0.9} metalness={0.1} />
-        </mesh>
-      ))}
-
-      {/* Decorative garden trees (simple cone + cylinder) */}
-      {[
-        [-12, 0, 5], [12, 0, 5], [-12, 0, -5], [12, 0, -5],
-        [-15, 0, 0], [15, 0, 0], [-8, 0, 15], [8, 0, 15]
-      ].map((pos, idx) => (
-        <group key={`tree-${idx}`} position={pos as [number, number, number]}>
-          <mesh position={[0, 1.2, 0]}>
-            <cylinderGeometry args={[0.12, 0.15, 2.4, 8]} />
-            <meshStandardMaterial color="#1A0F08" roughness={0.8} />
-          </mesh>
-          <mesh position={[0, 3.0, 0]}>
-            <coneGeometry args={[1.2, 2.5, 8]} />
-            <meshStandardMaterial color="#0D3320" roughness={0.7} metalness={0.1} />
-          </mesh>
-        </group>
       ))}
 
 
       {/* ═══════ 2. GRAND ENTRANCE CANOPY ═══════ */}
-      <group position={[0, 0, 5]}>
-        <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
-          <boxGeometry args={[10, 0.3, 5]} />
-          <meshStandardMaterial color="#07111F" metalness={0.9} roughness={0.1} />
+      <group position={[0, 0, 5.5]}>
+        <mesh position={[0, 3.5, 0]}>
+          <boxGeometry args={[10.5, 0.28, 5]} />
+          <meshStandardMaterial color="#07111F" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Gold trim edge */}
-        <mesh position={[0, 3.35, 2.5]}>
-          <boxGeometry args={[10, 0.12, 0.1]} />
-          <meshStandardMaterial color="#C8A96B" emissive="#C8A96B" emissiveIntensity={1.0} />
-        </mesh>
-        {/* Canopy columns */}
-        {[-4, -1.5, 1.5, 4].map((x, idx) => (
-          <mesh key={`col-${idx}`} position={[x, 1.75, 2]} castShadow>
-            <cylinderGeometry args={[0.15, 0.18, 3.5, 12]} />
-            <meshStandardMaterial color="#C8A96B" metalness={0.85} roughness={0.15} />
-          </mesh>
-        ))}
-        {/* Warm entrance glow */}
-        <pointLight position={[0, 2.8, 1]} intensity={5.0} color="#E8D49B" distance={10} />
-        <pointLight position={[-3, 2.8, 1]} intensity={3.0} color="#C8A96B" distance={6} />
-        <pointLight position={[3, 2.8, 1]} intensity={3.0} color="#C8A96B" distance={6} />
         
-        {/* Reception doors (glass panels) */}
-        {[-1.2, 1.2].map((x, idx) => (
-          <mesh key={`door-${idx}`} position={[x, 1.6, 2.5]}>
-            <boxGeometry args={[1.8, 3.0, 0.08]} />
-            <meshPhysicalMaterial color="#1B4D8E" transmission={0.5} transparent opacity={0.7} roughness={0.05} metalness={0.9} />
+        <mesh position={[0, 3.36, 2.51]}>
+          <boxGeometry args={[10.5, 0.12, 0.08]} />
+          <meshBasicMaterial color="#D4AF37" />
+        </mesh>
+
+        {[-4.2, -1.4, 1.4, 4.2].map((x, idx) => (
+          <mesh key={`col-${idx}`} position={[x, 1.75, 2]}>
+            <cylinderGeometry args={[0.14, 0.16, 3.5, 8]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.1} />
           </mesh>
         ))}
+
+        <mesh position={[0, 1.6, 2.5]}>
+          <boxGeometry args={[4, 3.0, 0.06]} />
+          <meshStandardMaterial color="#1B4D8E" roughness={0.1} metalness={0.9} transparent opacity={0.8} />
+        </mesh>
       </group>
 
 
       {/* ═══════ 3. MAIN CENTRAL TOWER (14 FLOORS) ═══════ */}
       <group position={[0, 0, 0]}>
-        {/* Core structure */}
-        <mesh position={[0, 7.0, 0]} castShadow receiveShadow>
-          <boxGeometry args={[10, 14, 6]} />
-          <meshStandardMaterial color="#07111F" metalness={0.65} roughness={0.25} />
+        <mesh position={[0, 7.0, 0]}>
+          <boxGeometry args={[10.2, 14, 6.2]} />
+          <meshStandardMaterial color="#07111F" metalness={0.7} roughness={0.2} />
         </mesh>
 
         {/* Front glass curtain wall */}
-        <mesh position={[0, 7.0, 3.01]}>
-          <planeGeometry args={[9.6, 13.6]} />
-          <meshPhysicalMaterial 
+        <mesh position={[0, 7.0, 3.12]}>
+          <planeGeometry args={[9.8, 13.8]} />
+          <meshStandardMaterial 
             color="#123B70" 
-            transmission={0.55} 
-            opacity={0.8} 
+            roughness={0.1} 
+            metalness={0.9} 
             transparent 
-            roughness={0.08} 
-            metalness={0.92} 
-            reflectivity={1.0}
+            opacity={0.85} 
           />
         </mesh>
 
-        {/* Rear glass curtain wall */}
-        <mesh position={[0, 7.0, -3.01]} rotation={[0, Math.PI, 0]}>
-          <planeGeometry args={[9.6, 13.6]} />
-          <meshPhysicalMaterial color="#0B1F3A" transmission={0.4} opacity={0.75} transparent roughness={0.1} metalness={0.9} />
-        </mesh>
-
-        {/* Emissive floor level strips (warm occupied suite glow) */}
+        {/* Glowing floor strips */}
         {[1.0, 2.3, 3.6, 4.9, 6.2, 7.5, 8.8, 10.1, 11.4, 12.7].map((y, idx) => (
-          <group key={`floor-${idx}`}>
-            <mesh position={[0, y, 3.02]}>
-              <boxGeometry args={[9.4, 0.06, 0.04]} />
-              <meshStandardMaterial color="#C8A96B" emissive="#C8A96B" emissiveIntensity={idx % 3 === 0 ? 2.0 : 1.0} />
-            </mesh>
-            {/* Random window lights */}
-            {[-3.5, -1.5, 0.5, 2.5].map((wx, widx) => (
-              idx % 2 === widx % 2 ? (
-                <mesh key={`win-${idx}-${widx}`} position={[wx, y + 0.5, 3.02]}>
-                  <planeGeometry args={[1.2, 0.8]} />
-                  <meshStandardMaterial color="#E8D49B" emissive="#E8D49B" emissiveIntensity={0.6} transparent opacity={0.4} />
-                </mesh>
-              ) : null
-            ))}
-          </group>
-        ))}
-
-        {/* Vertical structural mullions */}
-        {[-4.6, -2.3, 0, 2.3, 4.6].map((x, idx) => (
-          <mesh key={`mul-${idx}`} position={[x, 7.0, 3.03]} castShadow>
-            <boxGeometry args={[0.15, 14, 0.12]} />
-            <meshStandardMaterial color="#C8A96B" metalness={0.85} roughness={0.15} />
+          <mesh key={`floor-${idx}`} position={[0, y, 3.13]}>
+            <boxGeometry args={[9.6, 0.06, 0.02]} />
+            <meshBasicMaterial color="#D4AF37" />
           </mesh>
         ))}
 
-        {/* Crown / top accent band */}
-        <mesh position={[0, 14.1, 0]} castShadow>
-          <boxGeometry args={[10.4, 0.3, 6.4]} />
-          <meshStandardMaterial color="#C8A96B" metalness={0.9} roughness={0.1} emissive="#C8A96B" emissiveIntensity={0.5} />
+        {/* Vertical mullions */}
+        {[-4.7, -2.35, 0, 2.35, 4.7].map((x, idx) => (
+          <mesh key={`mullion-${idx}`} position={[x, 7.0, 3.14]}>
+            <boxGeometry args={[0.16, 14, 0.08]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.1} />
+          </mesh>
+        ))}
+
+        <mesh position={[0, 14.1, 0]}>
+          <boxGeometry args={[10.6, 0.3, 6.6]} />
+          <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.1} />
         </mesh>
       </group>
 
 
       {/* ═══════ 4. EAST WING — LUXURY SUITES ═══════ */}
-      <group position={[-8, 0, -1]}>
-        <mesh position={[0, 4.5, 0]} castShadow receiveShadow>
-          <boxGeometry args={[6, 9, 5]} />
-          <meshStandardMaterial color="#0B1F3A" metalness={0.55} roughness={0.35} />
+      <group position={[-8.2, 0, -1]}>
+        <mesh position={[0, 4.5, 0]}>
+          <boxGeometry args={[6.2, 9, 5.2]} />
+          <meshStandardMaterial color="#0B1320" metalness={0.6} roughness={0.3} />
         </mesh>
-        {/* Suite balcony glass rails */}
         {[1.5, 3.3, 5.1, 6.9, 8.2].map((y, idx) => (
-          <mesh key={`ebal-${idx}`} position={[0, y, 2.51]}>
-            <boxGeometry args={[5.6, 0.5, 0.08]} />
-            <meshStandardMaterial color="#387BCB" metalness={0.85} roughness={0.15} transparent opacity={0.7} />
+          <mesh key={`ebal-${idx}`} position={[0, y, 2.61]}>
+            <boxGeometry args={[5.8, 0.45, 0.06]} />
+            <meshStandardMaterial color="#387BCB" metalness={0.8} roughness={0.2} transparent opacity={0.8} />
           </mesh>
         ))}
-        {/* Gold suite accent trim */}
         <mesh position={[0, 9.05, 0]}>
-          <boxGeometry args={[6.2, 0.15, 5.2]} />
-          <meshStandardMaterial color="#C8A96B" metalness={0.9} roughness={0.1} />
+          <boxGeometry args={[6.4, 0.15, 5.4]} />
+          <meshBasicMaterial color="#D4AF37" />
         </mesh>
-        <pointLight position={[0, 3, 3]} intensity={2.5} color="#E8D49B" distance={8} />
       </group>
 
 
       {/* ═══════ 5. WEST WING — SPA & GASTRONOMY ═══════ */}
-      <group position={[8, 0, -1]}>
-        <mesh position={[0, 4.5, 0]} castShadow receiveShadow>
-          <boxGeometry args={[6, 9, 5]} />
-          <meshStandardMaterial color="#0B1F3A" metalness={0.55} roughness={0.35} />
+      <group position={[8.2, 0, -1]}>
+        <mesh position={[0, 4.5, 0]}>
+          <boxGeometry args={[6.2, 9, 5.2]} />
+          <meshStandardMaterial color="#0B1320" metalness={0.6} roughness={0.3} />
         </mesh>
         {[1.5, 3.3, 5.1, 6.9, 8.2].map((y, idx) => (
-          <mesh key={`wbal-${idx}`} position={[0, y, 2.51]}>
-            <boxGeometry args={[5.6, 0.5, 0.08]} />
-            <meshStandardMaterial color="#387BCB" metalness={0.85} roughness={0.15} transparent opacity={0.7} />
+          <mesh key={`wbal-${idx}`} position={[0, y, 2.61]}>
+            <boxGeometry args={[5.8, 0.45, 0.06]} />
+            <meshStandardMaterial color="#387BCB" metalness={0.8} roughness={0.2} transparent opacity={0.8} />
           </mesh>
         ))}
         <mesh position={[0, 9.05, 0]}>
-          <boxGeometry args={[6.2, 0.15, 5.2]} />
-          <meshStandardMaterial color="#C8A96B" metalness={0.9} roughness={0.1} />
+          <boxGeometry args={[6.4, 0.15, 5.4]} />
+          <meshBasicMaterial color="#D4AF37" />
         </mesh>
-        <pointLight position={[0, 3, 3]} intensity={2.5} color="#387BCB" distance={8} />
       </group>
 
 
-      {/* ═══════ 6. SKY BRIDGE CONNECTOR ═══════ */}
+      {/* ═══════ 6. SKY BRIDGES ═══════ */}
       <group position={[0, 7, -1]}>
-        {/* Left bridge */}
-        <mesh position={[-5.5, 0, 0]} castShadow>
-          <boxGeometry args={[3, 0.5, 2]} />
-          <meshPhysicalMaterial color="#123B70" transmission={0.4} transparent opacity={0.65} roughness={0.1} metalness={0.9} />
+        <mesh position={[-5.6, 0, 0]}>
+          <boxGeometry args={[3, 0.5, 1.8]} />
+          <meshStandardMaterial color="#123B70" metalness={0.8} roughness={0.2} transparent opacity={0.75} />
         </mesh>
-        {/* Right bridge */}
-        <mesh position={[5.5, 0, 0]} castShadow>
-          <boxGeometry args={[3, 0.5, 2]} />
-          <meshPhysicalMaterial color="#123B70" transmission={0.4} transparent opacity={0.65} roughness={0.1} metalness={0.9} />
+        <mesh position={[5.6, 0, 0]}>
+          <boxGeometry args={[3, 0.5, 1.8]} />
+          <meshStandardMaterial color="#123B70" metalness={0.8} roughness={0.2} transparent opacity={0.75} />
         </mesh>
       </group>
 
 
-      {/* ═══════ 7. ROOFTOP INFINITY SKY POOL ═══════ */}
+      {/* ═══════ 7. ROOFTOP INFINITY POOL DECK ═══════ */}
       <group position={[0, 14.2, 0]}>
-        <mesh position={[0, 0, 0]} castShadow receiveShadow>
-          <boxGeometry args={[10.6, 0.5, 6.6]} />
-          <meshStandardMaterial color="#07111F" metalness={0.75} roughness={0.25} />
+        <mesh position={[0, 0, 0]}>
+          <boxGeometry args={[10.8, 0.4, 6.8]} />
+          <meshStandardMaterial color="#07111F" metalness={0.8} roughness={0.2} />
         </mesh>
-        {/* Pool water surface */}
-        <mesh ref={poolWaterRef} position={[0, 0.35, 0]}>
-          <boxGeometry args={[7, 0.08, 3.5]} />
-          <meshStandardMaterial color="#2662AB" emissive="#2662AB" emissiveIntensity={2.5} roughness={0.05} />
+        <mesh ref={poolWaterRef} position={[0, 0.28, 0]}>
+          <boxGeometry args={[7.2, 0.08, 3.6]} />
+          <meshStandardMaterial color="#2662AB" roughness={0.1} metalness={0.9} />
         </mesh>
-        {/* Pool railing */}
-        <mesh position={[0, 0.6, 3.2]}>
-          <boxGeometry args={[10.6, 0.8, 0.06]} />
-          <meshPhysicalMaterial color="#387BCB" transmission={0.5} transparent opacity={0.5} roughness={0.1} metalness={0.8} />
-        </mesh>
-        <pointLight position={[0, 1.2, 0]} intensity={4.0} color="#2662AB" distance={12} />
       </group>
 
 
-      {/* ═══════ 8. HELIPAD ═══════ */}
-      <group position={[0, 14.8, 0]}>
+      {/* ═══════ 8. ROOFTOP HELIPAD ═══════ */}
+      <group position={[0, 14.7, 0]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-          <ringGeometry args={[0.9, 1.3, 32]} />
-          <meshStandardMaterial color="#C8A96B" emissive="#C8A96B" emissiveIntensity={2.0} />
+          <ringGeometry args={[1.0, 1.4, 24]} />
+          <meshBasicMaterial color="#D4AF37" />
         </mesh>
-        {/* H marking */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.06, 0]}>
-          <planeGeometry args={[0.5, 1.0]} />
-          <meshStandardMaterial color="#F5F1E8" emissive="#F5F1E8" emissiveIntensity={0.5} />
-        </mesh>
-        <pointLight position={[0, 0.8, 0]} intensity={3.0} color="#C8A96B" distance={6} />
       </group>
 
 
-      {/* ═══════ 9. WATER FEATURE & FOUNTAIN ═══════ */}
-      <group position={[0, 0, 10]}>
+      {/* ═══════ 9. WATER FOUNTAIN ═══════ */}
+      <group position={[0, 0, 11]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
-          <circleGeometry args={[3, 32]} />
-          <meshStandardMaterial color="#0B1F3A" emissive="#123B70" emissiveIntensity={1.0} roughness={0.1} />
+          <circleGeometry args={[3.2, 24]} />
+          <meshStandardMaterial color="#123B70" roughness={0.1} metalness={0.9} />
         </mesh>
-        {/* Inner fountain ring */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, 0]}>
-          <ringGeometry args={[1.0, 1.3, 24]} />
-          <meshStandardMaterial color="#C8A96B" emissive="#C8A96B" emissiveIntensity={0.8} />
+        <mesh ref={fountainRef} position={[0, 0.7, 0]}>
+          <cylinderGeometry args={[0.08, 0.03, 1.4, 8]} />
+          <meshStandardMaterial color="#387BCB" transparent opacity={0.7} />
         </mesh>
-        {/* Fountain jet */}
-        <mesh ref={fountainRef} position={[0, 0.8, 0]}>
-          <cylinderGeometry args={[0.08, 0.03, 1.6, 8]} />
-          <meshStandardMaterial color="#387BCB" emissive="#387BCB" emissiveIntensity={2.0} transparent opacity={0.6} />
-        </mesh>
-        <pointLight position={[0, 1.5, 0]} intensity={4.0} color="#387BCB" distance={10} />
       </group>
-
-
-      {/* ═══════ 10. PERIMETER PATHWAY LIGHTING ═══════ */}
-      {[
-        [-6, 0.6, 10], [6, 0.6, 10], [-10, 0.6, 5], [10, 0.6, 5],
-        [-10, 0.6, -5], [10, 0.6, -5], [-6, 0.6, -8], [6, 0.6, -8],
-        [0, 0.6, -8], [-14, 0.6, 10], [14, 0.6, 10]
-      ].map((pos, idx) => (
-        <group key={`lamp-${idx}`} position={pos as [number, number, number]}>
-          <mesh>
-            <cylinderGeometry args={[0.06, 0.06, 1.2, 8]} />
-            <meshStandardMaterial color="#0B1F3A" metalness={0.7} roughness={0.3} />
-          </mesh>
-          <mesh position={[0, 0.7, 0]}>
-            <sphereGeometry args={[0.15, 12, 12]} />
-            <meshStandardMaterial color="#C8A96B" emissive="#C8A96B" emissiveIntensity={3.0} />
-          </mesh>
-          <pointLight position={[0, 0.8, 0]} intensity={1.5} color="#E8D49B" distance={5} />
-        </group>
-      ))}
 
     </group>
   );
