@@ -8,7 +8,6 @@ import {
 } from '@/lib/mock-data';
 import { 
   Calendar, 
-  Users, 
   BedDouble, 
   TrendingUp, 
   DollarSign, 
@@ -25,8 +24,6 @@ import {
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell
@@ -36,7 +33,7 @@ const PIE_DATA = [
   { name: 'Direct Booking', value: 55, color: '#C8A96B' },
   { name: 'Luxury Travel Agency', value: 25, color: '#123B70' },
   { name: 'Corporate Account', value: 12, color: '#2662AB' },
-  { name: 'VIP Concierge', value: 8, color: '#E8D49B' }
+  { name: 'VIP Concierge', value: 8, color: '#8B6508' }
 ];
 
 export default function AdminDashboardPage() {
@@ -49,112 +46,112 @@ export default function AdminDashboardPage() {
           <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8A96B] font-semibold">
             SAPPHIRE HOTEL MANAGEMENT PLATFORM
           </span>
-          <h1 className="text-3xl font-serif text-[#F5F1E8] mt-1">Executive Operations Dashboard</h1>
+          <h1 className="text-3xl font-serif text-[#123B70] mt-1 font-semibold">Executive Operations Dashboard</h1>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="px-3.5 py-1.5 rounded-full bg-[#0B1F3A] border border-[#123B70] text-xs text-[#8B96A8]">
-            Property: <span className="text-[#C8A96B] font-semibold">Sapphire Grand Resort</span>
+          <div className="px-3.5 py-1.5 rounded-full bg-white border border-[#E6E8EC] text-xs text-[#667085] shadow-sm">
+            Property: <span className="text-[#123B70] font-semibold">Sapphire Grand Resort</span>
           </div>
         </div>
       </div>
 
-      {/* KPI Grid (Req 28) */}
+      {/* KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         
         {/* KPI 1 */}
-        <div className="p-5 rounded-2xl bg-[#07111F] border border-[#C8A96B]/20 space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-[#8B96A8]">Total Revenue</span>
-            <div className="p-2 rounded-lg bg-[#123B70]/40 text-[#C8A96B]">
+            <span className="text-[10px] uppercase tracking-widest text-[#667085]">Total Revenue</span>
+            <div className="p-2 rounded-lg bg-[#F7F8FA] text-[#123B70]">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-serif text-[#F5F1E8]">${ADMIN_KPIS.totalRevenue.toLocaleString()}</div>
-          <div className="flex items-center gap-1 text-[11px] text-emerald-400">
+          <div className="text-2xl font-serif text-[#123B70] font-semibold">${ADMIN_KPIS.totalRevenue.toLocaleString()}</div>
+          <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium">
             <TrendingUp className="w-3.5 h-3.5" />
             <span>+14.2% vs last month</span>
           </div>
         </div>
 
         {/* KPI 2 */}
-        <div className="p-5 rounded-2xl bg-[#07111F] border border-[#C8A96B]/20 space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-[#8B96A8]">Total Bookings</span>
-            <div className="p-2 rounded-lg bg-[#123B70]/40 text-[#C8A96B]">
+            <span className="text-[10px] uppercase tracking-widest text-[#667085]">Total Bookings</span>
+            <div className="p-2 rounded-lg bg-[#F7F8FA] text-[#123B70]">
               <Calendar className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-serif text-[#F5F1E8]">{ADMIN_KPIS.totalBookings.toLocaleString()}</div>
-          <div className="flex items-center gap-1 text-[11px] text-emerald-400">
+          <div className="text-2xl font-serif text-[#0B172A] font-semibold">{ADMIN_KPIS.totalBookings.toLocaleString()}</div>
+          <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium">
             <TrendingUp className="w-3.5 h-3.5" />
             <span>+8.6% active pace</span>
           </div>
         </div>
 
         {/* KPI 3 */}
-        <div className="p-5 rounded-2xl bg-[#07111F] border border-[#C8A96B]/20 space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-[#8B96A8]">Occupancy Rate</span>
-            <div className="p-2 rounded-lg bg-[#123B70]/40 text-[#C8A96B]">
+            <span className="text-[10px] uppercase tracking-widest text-[#667085]">Occupancy Rate</span>
+            <div className="p-2 rounded-lg bg-[#F7F8FA] text-[#C8A96B]">
               <BedDouble className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-serif text-[#C8A96B]">{ADMIN_KPIS.occupancyRate}%</div>
-          <div className="flex items-center gap-1 text-[11px] text-[#8B96A8]">
+          <div className="text-2xl font-serif text-[#C8A96B] font-semibold">{ADMIN_KPIS.occupancyRate}%</div>
+          <div className="flex items-center gap-1 text-[11px] text-[#667085]">
             <span>Peak capacity high</span>
           </div>
         </div>
 
         {/* KPI 4 */}
-        <div className="p-5 rounded-2xl bg-[#07111F] border border-[#C8A96B]/20 space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-[#8B96A8]">Today's Arrivals</span>
-            <div className="p-2 rounded-lg bg-[#123B70]/40 text-emerald-400">
+            <span className="text-[10px] uppercase tracking-widest text-[#667085]">Today's Arrivals</span>
+            <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
               <LogIn className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-serif text-[#F5F1E8]">{ADMIN_KPIS.todayArrivals}</div>
-          <div className="text-[11px] text-[#8B96A8]">34 Checked in so far</div>
+          <div className="text-2xl font-serif text-[#0B172A] font-semibold">{ADMIN_KPIS.todayArrivals}</div>
+          <div className="text-[11px] text-[#667085]">34 Checked in so far</div>
         </div>
 
         {/* KPI 5 */}
-        <div className="p-5 rounded-2xl bg-[#07111F] border border-[#C8A96B]/20 space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-[#8B96A8]">Today's Departures</span>
-            <div className="p-2 rounded-lg bg-[#123B70]/40 text-amber-400">
+            <span className="text-[10px] uppercase tracking-widest text-[#667085]">Today's Departures</span>
+            <div className="p-2 rounded-lg bg-amber-50 text-amber-600">
               <LogOut className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-serif text-[#F5F1E8]">{ADMIN_KPIS.todayDepartures}</div>
-          <div className="text-[11px] text-[#8B96A8]">28 Processed clean</div>
+          <div className="text-2xl font-serif text-[#0B172A] font-semibold">{ADMIN_KPIS.todayDepartures}</div>
+          <div className="text-[11px] text-[#667085]">28 Processed clean</div>
         </div>
 
         {/* KPI 6 */}
-        <div className="p-5 rounded-2xl bg-[#07111F] border border-[#C8A96B]/20 space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-[#8B96A8]">Available Rooms</span>
-            <div className="p-2 rounded-lg bg-[#123B70]/40 text-[#C8A96B]">
+            <span className="text-[10px] uppercase tracking-widest text-[#667085]">Available Rooms</span>
+            <div className="p-2 rounded-lg bg-[#F7F8FA] text-[#123B70]">
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-serif text-[#F5F1E8]">{ADMIN_KPIS.availableRooms}</div>
-          <div className="text-[11px] text-[#8B96A8]">Out of 320 inventory</div>
+          <div className="text-2xl font-serif text-[#0B172A] font-semibold">{ADMIN_KPIS.availableRooms}</div>
+          <div className="text-[11px] text-[#667085]">Out of 320 inventory</div>
         </div>
 
       </div>
 
-      {/* Analytics Charts Section (Req 29) */}
+      {/* Analytics Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Main Revenue Area Chart */}
-        <div className="lg:col-span-8 p-6 rounded-3xl bg-[#07111F] border border-[#C8A96B]/20 space-y-4">
+        <div className="lg:col-span-8 p-6 rounded-3xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-serif text-[#F5F1E8]">Annual Revenue & Occupancy Growth</h3>
-              <p className="text-xs text-[#8B96A8]">Monthly tracking performance across all Sapphire Grand wings</p>
+              <h3 className="text-lg font-serif text-[#123B70] font-semibold">Annual Revenue & Occupancy Growth</h3>
+              <p className="text-xs text-[#667085]">Monthly tracking performance across all Sapphire Grand wings</p>
             </div>
-            <span className="text-xs text-[#C8A96B] font-mono">2026 Fiscal Year</span>
+            <span className="text-xs text-[#C8A96B] font-mono font-semibold">2026 Fiscal Year</span>
           </div>
 
           <div className="h-72 w-full pt-4">
@@ -162,32 +159,32 @@ export default function AdminDashboardPage() {
               <AreaChart data={REVENUE_CHART_DATA}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#123B70" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#123B70" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorOcc" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#C8A96B" stopOpacity={0.4}/>
                     <stop offset="95%" stopColor="#C8A96B" stopOpacity={0}/>
                   </linearGradient>
-                  <linearGradient id="colorOcc" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#123B70" stopOpacity={0.6}/>
-                    <stop offset="95%" stopColor="#123B70" stopOpacity={0}/>
-                  </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#123B70" opacity={0.3} />
-                <XAxis dataKey="month" stroke="#8B96A8" fontSize={11} />
-                <YAxis stroke="#8B96A8" fontSize={11} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E6E8EC" />
+                <XAxis dataKey="month" stroke="#667085" fontSize={11} />
+                <YAxis stroke="#667085" fontSize={11} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0B1F3A', borderColor: '#C8A96B', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E6E8EC', borderRadius: '12px', fontSize: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
                 />
-                <Area type="monotone" dataKey="revenue" stroke="#C8A96B" fillOpacity={1} fill="url(#colorRevenue)" name="Revenue ($)" />
-                <Area type="monotone" dataKey="occupancy" stroke="#387BCB" fillOpacity={1} fill="url(#colorOcc)" name="Occupancy (%)" />
+                <Area type="monotone" dataKey="revenue" stroke="#123B70" fillOpacity={1} fill="url(#colorRevenue)" name="Revenue ($)" />
+                <Area type="monotone" dataKey="occupancy" stroke="#C8A96B" fillOpacity={1} fill="url(#colorOcc)" name="Occupancy (%)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Revenue Sources Pie Chart */}
-        <div className="lg:col-span-4 p-6 rounded-3xl bg-[#07111F] border border-[#C8A96B]/20 space-y-4 flex flex-col justify-between">
+        <div className="lg:col-span-4 p-6 rounded-3xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-4 flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-serif text-[#F5F1E8]">Booking Channel Origin</h3>
-            <p className="text-xs text-[#8B96A8]">Percentage distribution of incoming reservations</p>
+            <h3 className="text-lg font-serif text-[#123B70] font-semibold">Booking Channel Origin</h3>
+            <p className="text-xs text-[#667085]">Percentage distribution of incoming reservations</p>
           </div>
 
           <div className="h-56 w-full relative">
@@ -207,20 +204,20 @@ export default function AdminDashboardPage() {
                   ))}
                 </Pie>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0B1F3A', borderColor: '#C8A96B', borderRadius: '8px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#E6E8EC', borderRadius: '8px', fontSize: '12px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
 
-          <div className="space-y-1.5 border-t border-[#C8A96B]/15 pt-3">
+          <div className="space-y-1.5 border-t border-[#E6E8EC] pt-3">
             {PIE_DATA.map((item, idx) => (
               <div key={idx} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-[#8B96A8]">{item.name}</span>
+                  <span className="text-[#667085]">{item.name}</span>
                 </div>
-                <span className="text-[#F5F1E8] font-mono font-medium">{item.value}%</span>
+                <span className="text-[#0B172A] font-mono font-semibold">{item.value}%</span>
               </div>
             ))}
           </div>
@@ -229,21 +226,21 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Reservations Snapshot */}
-      <div className="p-6 rounded-3xl bg-[#07111F] border border-[#C8A96B]/20 space-y-4">
+      <div className="p-6 rounded-3xl bg-white border border-[#E6E8EC] shadow-[0_10px_30px_rgba(11,23,42,0.04)] space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-serif text-[#F5F1E8]">Live Reservations Stream</h3>
-            <p className="text-xs text-[#8B96A8]">Real-time guest check-ins and bookings</p>
+            <h3 className="text-lg font-serif text-[#123B70] font-semibold">Live Reservations Stream</h3>
+            <p className="text-xs text-[#667085]">Real-time guest check-ins and bookings</p>
           </div>
-          <a href="/admin/reservations" className="text-xs text-[#C8A96B] hover:underline flex items-center gap-1">
+          <a href="/admin/reservations" className="text-xs text-[#123B70] hover:underline flex items-center gap-1 font-semibold">
             <span>View All Reservations</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#C8A96B]" />
           </a>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#0B1F3A] text-[#8B96A8] uppercase text-[10px] tracking-widest border-b border-[#123B70]">
+            <thead className="bg-[#F7F8FA] text-[#667085] uppercase text-[10px] tracking-widest border-b border-[#E6E8EC]">
               <tr>
                 <th className="p-3">Booking ID</th>
                 <th className="p-3">Guest Name</th>
@@ -255,25 +252,25 @@ export default function AdminDashboardPage() {
                 <th className="p-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#123B70]/40">
+            <tbody className="divide-y divide-[#E6E8EC]">
               {RESERVATIONS_DATA.slice(0, 5).map((res) => (
-                <tr key={res.id} className="hover:bg-[#0B1F3A]/60 transition-colors">
-                  <td className="p-3 font-mono text-[#C8A96B] font-semibold">{res.id}</td>
-                  <td className="p-3 font-medium text-[#F5F1E8]">{res.guestName}</td>
-                  <td className="p-3 text-[#8B96A8]">{res.roomType}</td>
-                  <td className="p-3 font-mono text-[#F5F1E8]">{res.roomNumber}</td>
-                  <td className="p-3 text-[#8B96A8]">{res.checkIn}</td>
-                  <td className="p-3 text-[#8B96A8]">{res.checkOut}</td>
-                  <td className="p-3 font-serif text-[#C8A96B]">${res.amount.toLocaleString()}</td>
+                <tr key={res.id} className="hover:bg-[#F7F8FA] transition-colors">
+                  <td className="p-3 font-mono text-[#123B70] font-semibold">{res.id}</td>
+                  <td className="p-3 font-medium text-[#0B172A]">{res.guestName}</td>
+                  <td className="p-3 text-[#667085]">{res.roomType}</td>
+                  <td className="p-3 font-mono text-[#0B172A]">{res.roomNumber}</td>
+                  <td className="p-3 text-[#667085]">{res.checkIn}</td>
+                  <td className="p-3 text-[#667085]">{res.checkOut}</td>
+                  <td className="p-3 font-serif text-[#123B70] font-bold">${res.amount.toLocaleString()}</td>
                   <td className="p-3">
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase ${
                       res.status === 'Checked In'
-                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
                         : res.status === 'Confirmed'
-                        ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                        ? 'bg-blue-50 text-blue-600 border border-blue-200'
                         : res.status === 'Pending'
-                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                        : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                        ? 'bg-amber-50 text-amber-600 border border-amber-200'
+                        : 'bg-rose-50 text-rose-600 border border-rose-200'
                     }`}>
                       {res.status}
                     </span>

@@ -2,15 +2,14 @@
 
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
+import * as THREE from 'three';
 import SapphireArchitecturalResort from './SapphireArchitecturalResort';
 import CameraController from './CameraController';
-import { HotspotData } from './DigitalTwinHotspots';
 
-interface HotelCanvasProps {
+export interface HotelCanvasProps {
   scrollProgress: number;
-  activeHotspot?: HotspotData | null;
-  onSelectHotspot?: (hotspot: HotspotData) => void;
+  activeHotspot?: any;
+  onSelectHotspot?: (hotspot: any) => void;
   showHotspots?: boolean;
   isInteractiveMode?: boolean;
   onToggleInteractive?: () => void;
@@ -23,32 +22,41 @@ export default function HotelCanvas({
   onToggleInteractive
 }: HotelCanvasProps) {
   return (
-    <div className="relative w-full h-full select-none overflow-hidden bg-[#030712]">
+    <div className="relative w-full h-full select-none overflow-hidden bg-[#F1F5F9]">
       <Canvas
-        dpr={1} // Nanosecond fast initialization & 120fps smooth performance
-        camera={{ position: [16, 9, 22], fov: 38, near: 0.1, far: 500 }}
+        shadows
+        dpr={[1, 2]} // High-resolution sharp rendering (No Blurriness)
+        camera={{ position: [16, 9, 22], fov: 34, near: 0.1, far: 500 }}
         gl={{ 
           antialias: true, 
           alpha: false, 
           powerPreference: 'high-performance',
-          precision: 'mediump',
-          preserveDrawingBuffer: false
+          precision: 'highp',
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.3
         }}
         className="w-full h-full"
       >
-        <color attach="background" args={['#030712']} />
-        <fog attach="fog" args={['#030712', 25, 80]} />
+        {/* Soft Sky & Crisp Edge Fog */}
+        <color attach="background" args={['#F1F5F9']} />
+        <fog attach="fog" args={['#F1F5F9', 28, 90]} />
 
-        {/* 2 Lightweight Lighting Sources */}
-        <ambientLight intensity={1.8} color="#F9F8F6" />
+        {/* Photorealistic High-Contrast Sunlight & Shadow Lighting */}
+        <ambientLight intensity={2.2} color="#FFFFFF" />
         <directionalLight
-          position={[20, 30, 20]}
-          intensity={2.5}
-          color="#FFF8EC"
+          position={[30, 40, 25]}
+          intensity={3.8}
+          color="#FFFDF7"
+          castShadow
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+          shadow-bias={-0.0001}
         />
-
-        {/* Lightweight Stars Atmosphere */}
-        <Stars radius={45} depth={25} count={250} factor={2} saturation={0} fade speed={0.4} />
+        <directionalLight
+          position={[-25, 20, -20]}
+          intensity={1.5}
+          color="#93C5FD"
+        />
 
         <Suspense fallback={null}>
           <SapphireArchitecturalResort />
@@ -60,16 +68,6 @@ export default function HotelCanvas({
           activeHotspot={activeHotspot}
           isInteractiveMode={isInteractiveMode}
         />
-
-        {isInteractiveMode && (
-          <OrbitControls 
-            enableZoom={true} 
-            enablePan={true}
-            maxPolarAngle={Math.PI / 2 - 0.02}
-            minDistance={5}
-            maxDistance={45}
-          />
-        )}
       </Canvas>
 
       {/* Mode Control Indicator Badge */}
@@ -77,10 +75,10 @@ export default function HotelCanvas({
         <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
           <button
             onClick={onToggleInteractive}
-            className={`px-4 py-2.5 rounded-full border text-xs font-serif tracking-widest transition-all backdrop-blur-md shadow-2xl cursor-pointer ${
+            className={`px-4 py-2.5 rounded-full border text-xs font-serif tracking-widest transition-all backdrop-blur-md shadow-lg cursor-pointer ${
               isInteractiveMode
-                ? 'bg-[#D4AF37] text-[#030712] border-[#F9F8F6] font-bold shadow-[0_0_20px_rgba(212,175,55,0.6)]'
-                : 'bg-[#0B1320]/90 text-[#F9F8F6] border-[#D4AF37]/50 hover:border-[#D4AF37]'
+                ? 'bg-[#0A172C] text-[#FFFFFF] border-[#D4AF37] font-bold shadow-[0_0_20px_rgba(10,23,44,0.4)]'
+                : 'bg-white text-[#0A172C] border-[#CBD5E1] hover:border-[#0A172C]'
             }`}
           >
             {isInteractiveMode ? 'FREE ORBIT MODE' : 'GUIDED TOUR MODE'}

@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import BookingBar from '@/components/BookingBar';
@@ -11,6 +10,8 @@ import Simulated360Modal from '@/components/Simulated360Modal';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import VRImageCard from '@/components/VRImageCard';
+import VRScrollRotateCard from '@/components/VRScrollRotateCard';
+import HeroVR3DVideoCard from '@/components/HeroVR3DVideoCard';
 import { HOTSPOTS, HotspotData } from '@/components/3d/DigitalTwinHotspots';
 import { 
   ROOMS_DATA, 
@@ -32,43 +33,14 @@ import {
   Maximize2
 } from 'lucide-react';
 
-const HotelCanvas = dynamic(() => import('@/components/3d/HotelCanvas'), {
-  ssr: false
-});
-
 export default function HomePage() {
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeHotspot, setActiveHotspot] = useState<HotspotData | null>(null);
-  const [isInteractiveMode, setIsInteractiveMode] = useState(false);
   const [activeRoomCategory, setActiveRoomCategory] = useState<'ROOM' | 'SUITE' | 'RESIDENCE'>('SUITE');
   const [selected360Room, setSelected360Room] = useState<RoomItem | null>(null);
   const [selectedGalleryItem, setSelectedGalleryItem] = useState<GalleryItem | null>(null);
   const [galleryFilter, setGalleryFilter] = useState<string>('All');
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [bookingRoomId, setBookingRoomId] = useState<string | undefined>();
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let requestRunning = false;
-
-    const handleScroll = () => {
-      if (!requestRunning) {
-        requestRunning = true;
-        requestAnimationFrame(() => {
-          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-          if (totalHeight > 0) {
-            const progress = Math.min(1, Math.max(0, window.scrollY / totalHeight));
-            setScrollProgress(progress);
-          }
-          requestRunning = false;
-        });
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleSelectHotspot = (hotspot: HotspotData) => {
     setActiveHotspot(hotspot);
@@ -81,47 +53,35 @@ export default function HomePage() {
     : GALLERY_DATA.filter((g) => g.category === galleryFilter);
 
   return (
-    <div ref={containerRef} className="relative text-[#F9F8F6] min-h-screen selection:bg-[#D4AF37] selection:text-[#030712] bg-[#030712]">
+    <div className="relative text-[#0F172A] min-h-screen selection:bg-[#123B70] selection:text-[#FFFFFF] bg-[#FFFFFF]">
       
       <Navbar onOpenBooking={() => setBookingModalOpen(true)} />
 
-      {/* PERMANENT 3D BACKGROUND CANVAS */}
-      <div className="fixed inset-0 z-0 w-full h-full pointer-events-auto">
-        <HotelCanvas
-          scrollProgress={scrollProgress}
-          activeHotspot={activeHotspot}
-          onSelectHotspot={handleSelectHotspot}
-          showHotspots={false}
-          isInteractiveMode={isInteractiveMode}
-          onToggleInteractive={() => setIsInteractiveMode(!isInteractiveMode)}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/60 to-transparent pointer-events-none" />
-      </div>
-
-      <div className="relative z-10 w-full pointer-events-none">
+      {/* PURE HD WHITE EDITORIAL CONTAINER */}
+      <div className="relative z-10 w-full pointer-events-auto">
         
-        {/* SCENE 01 — HERO ARRIVAL */}
-        <section className="relative min-h-screen flex flex-col justify-between px-4 sm:px-8 pt-28 sm:pt-36 pb-16 pointer-events-auto">
-          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* SCENE 01 — HERO ARRIVAL WITH CONTINUOUS 3D VR COMMERCIAL IMAGE */}
+        <section className="relative min-h-screen flex flex-col justify-between px-4 sm:px-8 pt-28 sm:pt-36 pb-16">
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            <div className="lg:col-span-6 space-y-5 p-6 sm:p-10 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-[0_20px_60px_rgba(0,0,0,0.9)] max-w-xl w-full">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#D4AF37]/40 bg-[#030712]/80">
-                <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
-                  SAPPHIRE HOTEL MANAGEMENT
+            <VRScrollRotateCard className="lg:col-span-6 space-y-6 p-8 sm:p-12 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_20px_50px_rgba(10,23,44,0.08)] w-full">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#B8860B]/40 bg-[#F4EFE6]">
+                <Sparkles className="w-4 h-4 text-[#123B70]" />
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#0A172C] font-bold">
+                  SAPPHIRE GRAND · INTERNATIONAL HOSPITALITY
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-6xl font-serif tracking-tight text-[#F9F8F6] leading-[0.95]">
+              <h1 className="text-4xl sm:text-7xl font-serif font-bold tracking-tight text-[#0A172C] leading-[0.95]">
                 SAPPHIRE GRAND
               </h1>
 
-              <div className="text-lg sm:text-2xl font-serif italic text-[#D4AF37]">
+              <div className="text-xl sm:text-3xl font-serif italic text-[#B8860B] font-medium">
                 THE ART OF STAYING.
               </div>
 
-              <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-light">
-                A next-generation hospitality platform powering luxury resort operations, guest management, Michelin gastronomy, and thermal spa sanctuaries.
+              <p className="text-xs sm:text-base text-[#475569] leading-relaxed font-normal">
+                Where hospitality meets intelligent technology. A next-generation hospitality platform powering luxury resort operations, guest management, Michelin gastronomy, and thermal spa sanctuaries.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -130,20 +90,29 @@ export default function HomePage() {
                     const el = document.getElementById('digital-twin-section');
                     el?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#AA8535] text-[#030712] font-bold text-xs uppercase tracking-widest hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-8 py-4 rounded-full bg-[#0A172C] text-[#FFFFFF] font-bold text-xs uppercase tracking-widest hover:bg-[#B8860B] shadow-[0_4px_15px_rgba(10,23,44,0.2)] transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Compass className="w-4 h-4" />
-                  <span>EXPLORE PROPERTY</span>
+                  <span>EXPLORE HOTEL</span>
                 </button>
 
                 <button
                   onClick={() => setBookingModalOpen(true)}
-                  className="px-6 py-3 rounded-full border border-[#D4AF37]/40 bg-[#030712]/80 text-[#F9F8F6] font-semibold text-xs uppercase tracking-widest hover:border-[#D4AF37] hover:bg-[#0F2038]/80 transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-8 py-4 rounded-full border border-[#CBD5E1] bg-[#F8FAFC] text-[#0A172C] font-semibold text-xs uppercase tracking-widest hover:border-[#0A172C] transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Calendar className="w-4 h-4 text-[#D4AF37]" />
+                  <Calendar className="w-4 h-4 text-[#B8860B]" />
                   <span>CHECK AVAILABILITY</span>
                 </button>
               </div>
+            </VRScrollRotateCard>
+
+            {/* CONTINUOUS 3D ADVERT MOTION COVER CARD */}
+            <div className="lg:col-span-6 w-full">
+              <HeroVR3DVideoCard 
+                imageSrc="/sapphire-hero-cover.png"
+                altText="Sapphire Grand & Resort Architectural Night Pool"
+                className="h-[480px] w-full"
+              />
             </div>
 
           </div>
@@ -155,112 +124,124 @@ export default function HomePage() {
 
 
         {/* SCENE 02 — THE ARRIVAL */}
-        <section className="relative min-h-[85vh] flex items-center px-4 sm:px-8 py-20 pointer-events-auto">
-          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <ScrollReveal className="lg:col-span-6 w-full" direction="left" duration={650}>
-              <div className="space-y-5 p-6 sm:p-10 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl max-w-xl w-full">
-                <span className="text-xs uppercase tracking-[0.35em] text-[#D4AF37] font-semibold">
-                  SCENE 02 — THE ARRIVAL
+        <section className="relative min-h-[80vh] flex items-center px-4 sm:px-8 py-20">
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <VRScrollRotateCard className="lg:col-span-6 w-full">
+              <div className="space-y-5 p-8 sm:p-10 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] w-full">
+                <span className="text-xs uppercase tracking-[0.35em] text-[#B8860B] font-bold">
+                  SECTION 01 — YOUR ARRIVAL
                 </span>
 
-                <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6]">
-                  WELCOME TO SAPPHIRE GRAND
+                <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#0A172C]">
+                  YOUR ARRIVAL STARTS HERE.
                 </h2>
 
-                <p className="text-base sm:text-lg font-serif italic text-[#D4AF37]">
+                <p className="text-base sm:text-lg font-serif italic text-[#B8860B]">
                   "Every arrival is an experience."
                 </p>
 
-                <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-light">
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-normal">
                   Step through the grand canopy entrance into custom architectural lighting, biometric concierge recognition, and seamless digital check-in.
                 </p>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
+
+            <VRScrollRotateCard className="lg:col-span-6">
+              <VRImageCard 
+                src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" 
+                alt="Grand Lobby Foyer" 
+                className="h-[380px] w-full rounded-3xl"
+              />
+            </VRScrollRotateCard>
+
           </div>
         </section>
 
 
         {/* SCENE 03 — PHILOSOPHY */}
-        <section className="relative min-h-screen flex items-center px-4 sm:px-8 py-20 pointer-events-auto">
+        <section className="relative min-h-screen flex items-center px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            <ScrollReveal className="lg:col-span-6 w-full" direction="left" duration={650}>
-              <div className="space-y-5 p-6 sm:p-10 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl max-w-xl w-full">
-                <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">
-                  SCENE 03 — PHILOSOPHY
+            <VRScrollRotateCard className="lg:col-span-6 w-full">
+              <div className="space-y-5 p-8 sm:p-10 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] w-full">
+                <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">
+                  SECTION 02 — THE HOTEL
                 </span>
 
-                <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6] leading-tight">
+                <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#0A172C] leading-tight">
                   MORE THAN A HOTEL.
                 </h2>
 
-                <p className="text-base sm:text-lg font-serif italic text-[#D4AF37]">
-                  Every arrival is an experience. Every detail has a purpose.
+                <p className="text-base sm:text-lg font-serif italic text-[#B8860B]">
+                  Every space is designed around the experience of the guest.
                 </p>
 
-                <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-light">
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed font-normal">
                   Sapphire Grand & Resort represents the convergence of international architectural design and intelligent property management technology.
                 </p>
 
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#D4AF37]/20">
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#CBD5E1]">
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif text-[#D4AF37]">100%</div>
-                    <div className="text-xs text-[#94A3B8]">Acoustic Isolation</div>
+                    <div className="text-2xl sm:text-3xl font-serif font-bold text-[#0A172C]">100%</div>
+                    <div className="text-xs text-[#475569]">Acoustic Isolation</div>
                   </div>
                   <div>
-                    <div className="text-2xl sm:text-3xl font-serif text-[#D4AF37]">24 / 7</div>
-                    <div className="text-xs text-[#94A3B8]">Dedicated Butler Desk</div>
+                    <div className="text-2xl sm:text-3xl font-serif font-bold text-[#0A172C]">24 / 7</div>
+                    <div className="text-xs text-[#475569]">Dedicated Butler Desk</div>
                   </div>
                 </div>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
 
-            <ScrollReveal className="lg:col-span-6 w-full" direction="right" delay={150} duration={650}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-xl">
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <VRScrollRotateCard>
+                <div className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_10px_30px_rgba(10,23,44,0.04)]">
                   <VRImageCard 
-                    src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" 
-                    alt="Façade entrance"
-                    className="h-40 sm:h-44 w-full" 
+                    src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80" 
+                    alt="Suite Interior"
+                    className="h-44 w-full" 
                   />
                   <div className="p-4 sm:p-5">
-                    <h4 className="font-serif text-base sm:text-lg text-[#F9F8F6]">Architectural Canopy</h4>
-                    <p className="text-xs text-[#94A3B8] mt-1">Main resort entrance with ambient warm lighting.</p>
+                    <h4 className="font-serif font-bold text-base sm:text-lg text-[#0A172C]">Acoustic Suites</h4>
+                    <p className="text-xs text-[#475569] mt-1">Soundproofed glass and private loggias.</p>
                   </div>
                 </div>
+              </VRScrollRotateCard>
 
-                <div className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-xl">
+              <VRScrollRotateCard>
+                <div className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_10px_30px_rgba(10,23,44,0.04)]">
                   <VRImageCard 
-                    src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80" 
-                    alt="Grand Marble Foyer"
-                    className="h-40 sm:h-44 w-full" 
+                    src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" 
+                    alt="Thermal Spa"
+                    className="h-44 w-full" 
                   />
                   <div className="p-4 sm:p-5">
-                    <h4 className="font-serif text-base sm:text-lg text-[#F9F8F6]">Marble Foyer</h4>
-                    <p className="text-xs text-[#94A3B8] mt-1">Italian marble atrium & concierge desk.</p>
+                    <h4 className="font-serif font-bold text-base sm:text-lg text-[#0A172C]">Thermal Spa</h4>
+                    <p className="text-xs text-[#475569] mt-1">Hydrotherapy and botanical saunas.</p>
                   </div>
                 </div>
-              </div>
-            </ScrollReveal>
+              </VRScrollRotateCard>
+            </div>
 
           </div>
         </section>
 
 
         {/* SCENE 04 — PROPERTY MAP */}
-        <section id="digital-twin-section" className="relative min-h-screen flex items-center px-4 sm:px-8 py-20 pointer-events-auto">
+        <section id="digital-twin-section" className="relative min-h-screen flex items-center px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             <div className="lg:col-span-6 space-y-5">
-              <ScrollReveal direction="up">
-                <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl space-y-4">
-                  <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">
-                    SCENE 04 — PROPERTY MAP
+              <VRScrollRotateCard>
+                <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] space-y-4">
+                  <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">
+                    PROPERTY MAP
                   </span>
-                  <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6]">
+                  <h2 className="text-2xl sm:text-5xl font-serif font-bold text-[#0A172C]">
                     EXPLORE THE HOTEL
                   </h2>
-                  <p className="text-xs sm:text-sm text-[#94A3B8] font-serif italic">
+                  <p className="text-xs sm:text-sm text-[#475569] font-serif italic">
                     INTERACTIVE BUILDING ZONES & AMENITIES
                   </p>
 
@@ -273,8 +254,8 @@ export default function HomePage() {
                           onClick={() => handleSelectHotspot(hotspot)}
                           className={`px-3.5 py-2 rounded-full border text-xs font-serif tracking-wider transition-all cursor-pointer ${
                             isActive 
-                              ? 'bg-[#D4AF37] text-[#030712] border-[#F9F8F6] font-bold shadow-[0_0_15px_rgba(212,175,55,0.5)]'
-                              : 'bg-[#030712]/80 text-[#F9F8F6] border-[#D4AF37]/30 hover:border-[#D4AF37]'
+                              ? 'bg-[#0A172C] text-[#FFFFFF] border-[#0A172C] font-bold shadow-md'
+                              : 'bg-[#F8FAFC] text-[#0F172A] border-[#CBD5E1] hover:border-[#0A172C]'
                           }`}
                         >
                           {hotspot.name}
@@ -283,59 +264,69 @@ export default function HomePage() {
                     })}
                   </div>
                 </div>
-              </ScrollReveal>
+              </VRScrollRotateCard>
 
               {activeHotspot && (
-                <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/50 space-y-4 shadow-2xl animate-in fade-in duration-300">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-semibold">{activeHotspot.category}</span>
-                    <button 
-                      onClick={() => setActiveHotspot(null)}
-                      className="text-[#94A3B8] hover:text-[#F9F8F6] cursor-pointer"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
+                <VRScrollRotateCard>
+                  <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#B8860B]/50 space-y-4 shadow-xl animate-in fade-in duration-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs uppercase tracking-widest text-[#B8860B] font-bold">{activeHotspot.category}</span>
+                      <button 
+                        onClick={() => setActiveHotspot(null)}
+                        className="text-[#475569] hover:text-[#0A172C] cursor-pointer"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0A172C]">{activeHotspot.name}</h3>
+                    <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">{activeHotspot.description}</p>
+                    <div className="pt-2">
+                      <button
+                        onClick={() => setBookingModalOpen(true)}
+                        className="px-6 py-2.5 rounded-full bg-[#0A172C] text-white text-xs font-bold uppercase tracking-widest hover:bg-[#B8860B] transition-colors cursor-pointer"
+                      >
+                        Reserve Zone Access
+                      </button>
+                    </div>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-serif text-[#F9F8F6]">{activeHotspot.name}</h3>
-                  <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">{activeHotspot.description}</p>
-                  <div className="pt-2">
-                    <button
-                      onClick={() => setBookingModalOpen(true)}
-                      className="px-6 py-2.5 rounded-full bg-[#D4AF37] text-[#030712] text-xs font-bold uppercase tracking-widest hover:bg-[#E8D49B] transition-colors cursor-pointer"
-                    >
-                      Reserve Zone Access
-                    </button>
-                  </div>
-                </div>
+                </VRScrollRotateCard>
               )}
             </div>
+
+            <VRScrollRotateCard className="lg:col-span-6">
+              <VRImageCard 
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80" 
+                alt="Property Map Visual" 
+                className="h-[420px] w-full rounded-3xl"
+              />
+            </VRScrollRotateCard>
 
           </div>
         </section>
 
 
         {/* SCENE 05 — ROOMS & SUITES */}
-        <section className="relative px-4 sm:px-8 py-20 pointer-events-auto">
+        <section className="relative px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto space-y-10">
             
-            <ScrollReveal direction="up">
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-2xl">
+            <VRScrollRotateCard>
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-2xl">
                 <div>
-                  <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">ACCOMMODATIONS</span>
-                  <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6] mt-1">
-                    CHOOSE YOUR EXPERIENCE
+                  <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">SECTION 03 — ROOMS</span>
+                  <h2 className="text-2xl sm:text-5xl font-serif font-bold text-[#0A172C] mt-1">
+                    FIND YOUR SPACE.
                   </h2>
                 </div>
 
-                <div className="flex items-center gap-2 bg-[#030712]/80 p-1.5 rounded-full border border-[#D4AF37]/40">
+                <div className="flex items-center gap-2 bg-[#F8FAFC] p-1.5 rounded-full border border-[#CBD5E1]">
                   {(['ROOM', 'SUITE', 'RESIDENCE'] as const).map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setActiveRoomCategory(cat)}
                       className={`px-4 py-2 rounded-full text-xs font-serif tracking-widest uppercase transition-all duration-300 cursor-pointer ${
                         activeRoomCategory === cat
-                          ? 'bg-[#D4AF37] text-[#030712] font-bold shadow-[0_0_15px_rgba(212,175,55,0.5)]'
-                          : 'text-[#94A3B8] hover:text-[#F9F8F6]'
+                          ? 'bg-[#0A172C] text-[#FFFFFF] font-bold shadow-md'
+                          : 'text-[#475569] hover:text-[#0A172C]'
                       }`}
                     >
                       {cat}
@@ -343,12 +334,12 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {filteredRooms.map((room, idx) => (
-                <ScrollReveal key={room.id} direction={idx % 2 === 0 ? 'left' : 'right'} delay={idx * 100}>
-                  <div className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-2xl hover:border-[#D4AF37] transition-all duration-500 flex flex-col justify-between group">
+              {filteredRooms.map((room) => (
+                <VRScrollRotateCard key={room.id}>
+                  <div className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_15px_40px_rgba(10,23,44,0.06)] hover:border-[#0A172C] transition-all duration-500 flex flex-col justify-between group">
                     <VRImageCard 
                       src={room.image} 
                       alt={room.name} 
@@ -358,18 +349,18 @@ export default function HomePage() {
                     <div className="p-5 sm:p-8 space-y-4 flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold">{room.category}</span>
-                          <span className="text-sm font-serif text-[#D4AF37] font-semibold">${room.price} / night</span>
+                          <span className="text-[10px] uppercase tracking-widest text-[#B8860B] font-bold">{room.category}</span>
+                          <span className="text-sm font-serif text-[#0A172C] font-bold">${room.price} / night</span>
                         </div>
-                        <h3 className="text-xl sm:text-2xl font-serif text-[#F9F8F6] group-hover:text-[#D4AF37] transition-colors mt-1">{room.name}</h3>
-                        <p className="text-xs text-[#D4AF37] italic font-serif mt-0.5">{room.tagline}</p>
-                        <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed mt-3">{room.description}</p>
+                        <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0A172C] group-hover:text-[#B8860B] transition-colors mt-1">{room.name}</h3>
+                        <p className="text-xs text-[#B8860B] italic font-serif mt-0.5">{room.tagline}</p>
+                        <p className="text-xs sm:text-sm text-[#475569] leading-relaxed mt-3">{room.description}</p>
                       </div>
 
-                      <div className="pt-4 border-t border-[#D4AF37]/20 space-y-4">
+                      <div className="pt-4 border-t border-[#CBD5E1] space-y-4">
                         <div className="flex flex-wrap gap-2">
                           {room.features.map((feat, fidx) => (
-                            <span key={fidx} className="px-3 py-1 rounded-full bg-[#030712]/80 text-[11px] text-[#94A3B8] border border-[#0F2038]">
+                            <span key={fidx} className="px-3 py-1 rounded-full bg-[#F8FAFC] text-[11px] text-[#475569] border border-[#CBD5E1]">
                               {feat}
                             </span>
                           ))}
@@ -378,15 +369,15 @@ export default function HomePage() {
                         <div className="flex items-center gap-3 pt-2">
                           <button
                             onClick={() => setBookingModalOpen(true)}
-                            className="flex-1 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#AA8535] text-[#030712] font-bold text-xs uppercase tracking-widest text-center hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] transition-all cursor-pointer"
+                            className="flex-1 py-3 rounded-full bg-[#0A172C] text-[#FFFFFF] font-bold text-xs uppercase tracking-widest text-center hover:bg-[#B8860B] shadow-md transition-all cursor-pointer"
                           >
-                            Reserve
+                            Reserve Suite
                           </button>
                           <button
                             onClick={() => setSelected360Room(room)}
-                            className="px-4 py-3 rounded-full border border-[#D4AF37]/40 text-[#F9F8F6] text-xs uppercase tracking-widest hover:border-[#D4AF37] hover:bg-[#0F2038]/60 transition-all flex items-center gap-1.5 cursor-pointer"
+                            className="px-4 py-3 rounded-full border border-[#CBD5E1] bg-[#F8FAFC] text-[#0A172C] text-xs uppercase tracking-widest hover:border-[#0A172C] transition-all flex items-center gap-1.5 cursor-pointer"
                           >
-                            <Eye className="w-3.5 h-3.5 text-[#D4AF37]" />
+                            <Eye className="w-3.5 h-3.5 text-[#B8860B]" />
                             <span>View 360°</span>
                           </button>
                         </div>
@@ -394,7 +385,7 @@ export default function HomePage() {
                     </div>
 
                   </div>
-                </ScrollReveal>
+                </VRScrollRotateCard>
               ))}
             </div>
 
@@ -403,22 +394,22 @@ export default function HomePage() {
 
 
         {/* SCENE 06 — GASTRONOMY */}
-        <section className="relative px-4 sm:px-8 py-20 pointer-events-auto">
+        <section className="relative px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto space-y-10">
             
-            <ScrollReveal direction="up">
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl max-w-2xl">
-                <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">GASTRONOMY</span>
-                <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6] mt-1">
+            <VRScrollRotateCard>
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] max-w-2xl">
+                <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">SECTION 05 — DINING</span>
+                <h2 className="text-2xl sm:text-5xl font-serif font-bold text-[#0A172C] mt-1">
                   ANOTHER REASON TO STAY.
                 </h2>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {DINING_DATA.map((dining, idx) => (
-                <ScrollReveal key={dining.id} direction="up" delay={idx * 80}>
-                  <div className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-2xl group hover:border-[#D4AF37] transition-all flex flex-col justify-between h-full">
+              {DINING_DATA.map((dining) => (
+                <VRScrollRotateCard key={dining.id}>
+                  <div className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_15px_40px_rgba(10,23,44,0.06)] group hover:border-[#0A172C] transition-all flex flex-col justify-between h-full">
                     <VRImageCard 
                       src={dining.image} 
                       alt={dining.name} 
@@ -427,19 +418,19 @@ export default function HomePage() {
 
                     <div className="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                       <div>
-                        <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold">{dining.cuisine}</span>
-                        <h3 className="text-lg sm:text-xl font-serif text-[#F9F8F6] mt-0.5">{dining.name}</h3>
-                        <p className="text-xs text-[#D4AF37] italic font-serif mt-0.5">{dining.tagline}</p>
-                        <p className="text-xs text-[#94A3B8] leading-relaxed mt-2">{dining.description}</p>
+                        <span className="text-[10px] uppercase tracking-widest text-[#B8860B] font-bold">{dining.cuisine}</span>
+                        <h3 className="text-lg sm:text-xl font-serif font-bold text-[#0A172C] mt-0.5">{dining.name}</h3>
+                        <p className="text-xs text-[#B8860B] italic font-serif mt-0.5">{dining.tagline}</p>
+                        <p className="text-xs text-[#475569] leading-relaxed mt-2">{dining.description}</p>
                       </div>
                       
-                      <div className="pt-3 border-t border-[#D4AF37]/20 text-[11px] text-[#94A3B8] space-y-1">
-                        <div>Hours: <span className="text-[#F9F8F6]">{dining.hours}</span></div>
-                        <div>Dress Code: <span className="text-[#D4AF37]">{dining.dressCode}</span></div>
+                      <div className="pt-3 border-t border-[#CBD5E1] text-[11px] text-[#475569] space-y-1">
+                        <div>Hours: <span className="text-[#0A172C] font-semibold">{dining.hours}</span></div>
+                        <div>Dress Code: <span className="text-[#B8860B]">{dining.dressCode}</span></div>
                       </div>
                     </div>
                   </div>
-                </ScrollReveal>
+                </VRScrollRotateCard>
               ))}
             </div>
 
@@ -448,25 +439,25 @@ export default function HomePage() {
 
 
         {/* SCENE 07 — WELLNESS */}
-        <section className="relative px-4 sm:px-8 py-20 pointer-events-auto">
+        <section className="relative px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto space-y-10">
             
-            <ScrollReveal direction="up">
-              <div className="text-center max-w-2xl mx-auto space-y-3 p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl">
-                <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">SAPPHIRE THERMAL SPA</span>
-                <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6]">
+            <VRScrollRotateCard>
+              <div className="text-center max-w-2xl mx-auto space-y-3 p-6 sm:p-8 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)]">
+                <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">SECTION 06 — WELLNESS</span>
+                <h2 className="text-2xl sm:text-5xl font-serif font-bold text-[#0A172C]">
                   REST. RESET. RETURN.
                 </h2>
-                <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                   Dedicated sanctuaries for hydrotherapy, Himalayan salt saunas, ice fountains, and temperature-controlled infinity pools.
                 </p>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {WELLNESS_DATA.map((wellness, idx) => (
-                <ScrollReveal key={wellness.id} direction="up" delay={idx * 120}>
-                  <div className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-2xl group hover:border-[#D4AF37] transition-all flex flex-col justify-between h-full">
+              {WELLNESS_DATA.map((wellness) => (
+                <VRScrollRotateCard key={wellness.id}>
+                  <div className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_15px_40px_rgba(10,23,44,0.06)] group hover:border-[#0A172C] transition-all flex flex-col justify-between h-full">
                     <VRImageCard 
                       src={wellness.image} 
                       alt={wellness.name} 
@@ -474,13 +465,13 @@ export default function HomePage() {
                     />
                     <div className="p-5 sm:p-6 space-y-2 flex-1 flex flex-col justify-between">
                       <div>
-                        <h3 className="text-lg sm:text-xl font-serif text-[#F9F8F6]">{wellness.name}</h3>
-                        <p className="text-xs text-[#D4AF37] font-serif italic mt-0.5">{wellness.tagline}</p>
-                        <p className="text-xs text-[#94A3B8] leading-relaxed mt-2">{wellness.description}</p>
+                        <h3 className="text-lg sm:text-xl font-serif font-bold text-[#0A172C]">{wellness.name}</h3>
+                        <p className="text-xs text-[#B8860B] font-serif italic mt-0.5">{wellness.tagline}</p>
+                        <p className="text-xs text-[#475569] leading-relaxed mt-2">{wellness.description}</p>
                       </div>
                     </div>
                   </div>
-                </ScrollReveal>
+                </VRScrollRotateCard>
               ))}
             </div>
 
@@ -489,27 +480,27 @@ export default function HomePage() {
 
 
         {/* SCENE 08 — DESTINATIONS */}
-        <section className="relative px-4 sm:px-8 py-20 pointer-events-auto">
+        <section className="relative px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto space-y-10">
             
-            <ScrollReveal direction="up">
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-2xl">
+            <VRScrollRotateCard>
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-2xl">
                 <div>
-                  <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">PORTFOLIO CONCEPTS</span>
-                  <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6] mt-1">
-                    WHERE THE WORLD MEETS.
+                  <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">SECTION 09 — DESTINATION COLLECTION</span>
+                  <h2 className="text-2xl sm:text-5xl font-serif font-bold text-[#0A172C] mt-1">
+                    GLOBAL HOSPITALITY CONCEPT
                   </h2>
                 </div>
-                <p className="text-xs text-[#94A3B8] max-w-md">
+                <p className="text-xs text-[#475569] max-w-md">
                   Conceptual international properties designed under Sapphire Hotel Management standards.
                 </p>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {DESTINATIONS_DATA.map((dest, idx) => (
-                <ScrollReveal key={dest.id} direction="up" delay={idx * 80}>
-                  <div className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-2xl group hover:border-[#D4AF37] transition-all flex flex-col justify-between h-full">
+              {DESTINATIONS_DATA.map((dest) => (
+                <VRScrollRotateCard key={dest.id}>
+                  <div className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_15px_40px_rgba(10,23,44,0.06)] group hover:border-[#0A172C] transition-all flex flex-col justify-between h-full">
                     <VRImageCard 
                       src={dest.image} 
                       alt={dest.city} 
@@ -518,14 +509,14 @@ export default function HomePage() {
 
                     <div className="p-5 sm:p-6 space-y-2 flex-1 flex flex-col justify-between">
                       <div>
-                        <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold">{dest.status}</span>
-                        <h3 className="text-lg sm:text-xl font-serif text-[#F9F8F6] mt-0.5">{dest.city}</h3>
-                        <p className="text-xs text-[#D4AF37] font-serif">{dest.country}</p>
-                        <p className="text-xs text-[#94A3B8] leading-relaxed mt-2">{dest.description}</p>
+                        <span className="text-[10px] uppercase tracking-widest text-[#B8860B] font-bold">{dest.status}</span>
+                        <h3 className="text-lg sm:text-xl font-serif font-bold text-[#0A172C] mt-0.5">{dest.city}</h3>
+                        <p className="text-xs text-[#B8860B] font-serif">{dest.country}</p>
+                        <p className="text-xs text-[#475569] leading-relaxed mt-2">{dest.description}</p>
                       </div>
                     </div>
                   </div>
-                </ScrollReveal>
+                </VRScrollRotateCard>
               ))}
             </div>
 
@@ -534,14 +525,14 @@ export default function HomePage() {
 
 
         {/* SCENE 09 — GALLERY */}
-        <section className="relative px-4 sm:px-8 py-20 pointer-events-auto">
+        <section className="relative px-4 sm:px-8 py-20">
           <div className="max-w-7xl mx-auto space-y-10">
             
-            <ScrollReveal direction="up">
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 shadow-2xl flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-2xl">
+            <VRScrollRotateCard>
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_15px_40px_rgba(10,23,44,0.06)] flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-2xl">
                 <div>
-                  <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">VISUAL PORTFOLIO</span>
-                  <h2 className="text-2xl sm:text-5xl font-serif text-[#F9F8F6] mt-1">
+                  <span className="text-xs uppercase tracking-[0.3em] text-[#B8860B] font-bold">VISUAL PORTFOLIO</span>
+                  <h2 className="text-2xl sm:text-5xl font-serif font-bold text-[#0A172C] mt-1">
                     ARCHITECTURAL GALLERY
                   </h2>
                 </div>
@@ -553,8 +544,8 @@ export default function HomePage() {
                       onClick={() => setGalleryFilter(cat)}
                       className={`px-3.5 py-1.5 rounded-full text-xs font-serif tracking-wider transition-all cursor-pointer ${
                         galleryFilter === cat
-                          ? 'bg-[#D4AF37] text-[#030712] font-bold'
-                          : 'bg-[#030712]/80 text-[#94A3B8] hover:text-[#F9F8F6]'
+                          ? 'bg-[#0A172C] text-[#FFFFFF] font-bold shadow-md'
+                          : 'bg-[#F8FAFC] text-[#475569] hover:text-[#0A172C]'
                       }`}
                     >
                       {cat}
@@ -562,14 +553,14 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-            </ScrollReveal>
+            </VRScrollRotateCard>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredGallery.map((item, idx) => (
-                <ScrollReveal key={item.id} direction="scale" delay={idx * 60}>
+              {filteredGallery.map((item) => (
+                <VRScrollRotateCard key={item.id}>
                   <div
                     onClick={() => setSelectedGalleryItem(item)}
-                    className="rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/30 overflow-hidden shadow-xl group cursor-pointer hover:border-[#D4AF37] transition-all"
+                    className="rounded-3xl bg-white border border-[#CBD5E1] overflow-hidden shadow-[0_15px_40px_rgba(10,23,44,0.06)] group cursor-pointer hover:border-[#0A172C] transition-all"
                   >
                     <VRImageCard 
                       src={item.image} 
@@ -578,13 +569,13 @@ export default function HomePage() {
                     />
                     <div className="p-4 sm:p-5 flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold">{item.category}</span>
-                        <h4 className="font-serif text-sm sm:text-base text-[#F9F8F6]">{item.title}</h4>
+                        <span className="text-[10px] uppercase tracking-widest text-[#B8860B] font-bold">{item.category}</span>
+                        <h4 className="font-serif font-bold text-sm sm:text-base text-[#0A172C]">{item.title}</h4>
                       </div>
-                      <Maximize2 className="w-4 h-4 text-[#D4AF37]" />
+                      <Maximize2 className="w-4 h-4 text-[#B8860B]" />
                     </div>
                   </div>
-                </ScrollReveal>
+                </VRScrollRotateCard>
               ))}
             </div>
 
@@ -592,34 +583,34 @@ export default function HomePage() {
         </section>
 
 
-        {/* SCENE 10 — SAAS MANAGEMENT PLATFORM */}
-        <section className="relative px-4 sm:px-8 py-24 pointer-events-auto">
-          <ScrollReveal direction="up">
-            <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8 p-6 sm:p-12 rounded-3xl bg-[#0B1320]/95 border border-[#D4AF37]/40 shadow-[0_25px_80px_rgba(0,0,0,0.95)]">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0F2038]/90 border border-[#D4AF37]/40 text-[#D4AF37] text-[11px] font-semibold uppercase tracking-[0.3em]">
-                <ShieldCheck className="w-4 h-4" />
-                <span>SAPPHIRE HOTEL MANAGEMENT PLATFORM</span>
+        {/* SCENE 10 — HOTEL MANAGEMENT SYSTEM TRANSITION */}
+        <section className="relative px-4 sm:px-8 py-24">
+          <VRScrollRotateCard>
+            <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8 p-6 sm:p-12 rounded-3xl bg-white border border-[#CBD5E1] shadow-[0_25px_60px_rgba(10,23,44,0.08)]">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F4EFE6] border border-[#B8860B]/40 text-[#0A172C] text-[11px] font-bold uppercase tracking-[0.3em]">
+                <ShieldCheck className="w-4 h-4 text-[#B8860B]" />
+                <span>SECTION 10 — HOTEL MANAGEMENT SYSTEM</span>
               </div>
 
-              <h2 className="text-3xl sm:text-6xl font-serif text-[#F9F8F6] leading-tight">
+              <h2 className="text-3xl sm:text-6xl font-serif font-bold text-[#0A172C] leading-tight">
                 BEYOND THE STAY.
               </h2>
 
-              <p className="text-xs sm:text-lg font-serif italic text-[#94A3B8] max-w-2xl mx-auto">
-                "A complete digital hospitality platform powering operations, guest CRM, housekeeping dispatches, and real-time revenue analytics."
+              <p className="text-xs sm:text-lg font-serif italic text-[#475569] max-w-2xl mx-auto">
+                "One intelligent system for every operation."
               </p>
 
               <div className="pt-2">
                 <Link
                   href="/admin"
-                  className="inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#AA8535] text-[#030712] font-bold text-xs sm:text-sm uppercase tracking-widest shadow-[0_0_35px_rgba(212,175,55,0.6)] hover:scale-105 transition-all group cursor-pointer"
+                  className="inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#0A172C] text-[#FFFFFF] font-bold text-xs sm:text-sm uppercase tracking-widest shadow-[0_6px_25px_rgba(10,23,44,0.3)] hover:bg-[#B8860B] transition-all group cursor-pointer"
                 >
                   <span>ENTER MANAGEMENT DASHBOARD</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                 </Link>
               </div>
             </div>
-          </ScrollReveal>
+          </VRScrollRotateCard>
         </section>
 
         <Footer />
@@ -643,11 +634,11 @@ export default function HomePage() {
       )}
 
       {selectedGalleryItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#030712]/95 backdrop-blur-2xl pointer-events-auto">
-          <div className="relative max-w-5xl w-full rounded-2xl overflow-hidden border border-[#D4AF37]/30 bg-[#0B1320]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl pointer-events-auto">
+          <div className="relative max-w-5xl w-full rounded-2xl overflow-hidden border border-[#CBD5E1] bg-white">
             <button
               onClick={() => setSelectedGalleryItem(null)}
-              className="absolute top-4 right-4 p-2.5 rounded-full bg-[#030712]/80 text-[#F9F8F6] hover:text-[#D4AF37] z-10 cursor-pointer"
+              className="absolute top-4 right-4 p-2.5 rounded-full bg-[#0A172C] text-white hover:bg-[#B8860B] z-10 cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
@@ -656,10 +647,10 @@ export default function HomePage() {
               alt={selectedGalleryItem.title}
               className="w-full max-h-[80vh] object-contain bg-black"
             />
-            <div className="p-6 bg-[#030712] flex items-center justify-between">
+            <div className="p-6 bg-white flex items-center justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold">{selectedGalleryItem.category}</span>
-                <h3 className="text-xl font-serif text-[#F9F8F6]">{selectedGalleryItem.title}</h3>
+                <span className="text-[10px] uppercase tracking-widest text-[#B8860B] font-bold">{selectedGalleryItem.category}</span>
+                <h3 className="text-xl font-serif font-bold text-[#0A172C]">{selectedGalleryItem.title}</h3>
               </div>
             </div>
           </div>
