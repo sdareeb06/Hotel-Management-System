@@ -11,7 +11,6 @@ interface SapphireArchitecturalResortProps {
 export default function SapphireArchitecturalResort({ onLoaded }: SapphireArchitecturalResortProps) {
   const groupRef = useRef<THREE.Group>(null);
   const poolWaterRef = useRef<THREE.Mesh>(null);
-  const fountainRef = useRef<THREE.Mesh>(null);
 
   React.useEffect(() => {
     if (onLoaded) onLoaded();
@@ -22,14 +21,11 @@ export default function SapphireArchitecturalResort({ onLoaded }: SapphireArchit
     
     // Smooth 360-degree continuous rotation orbit
     if (groupRef.current) {
-      groupRef.current.rotation.y = time * 0.06;
+      groupRef.current.rotation.y = time * 0.05;
     }
 
     if (poolWaterRef.current) {
       poolWaterRef.current.position.y = 14.3 + Math.sin(time * 1.5) * 0.02;
-    }
-    if (fountainRef.current) {
-      fountainRef.current.scale.y = 1 + Math.sin(time * 2.5) * 0.12;
     }
   });
 
@@ -39,10 +35,10 @@ export default function SapphireArchitecturalResort({ onLoaded }: SapphireArchit
       {/* ═══════ 1. GROUND PLAZA & APPROACH ═══════ */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
         <planeGeometry args={[90, 90]} />
-        <meshStandardMaterial color="#040914" roughness={0.3} metalness={0.7} />
+        <meshStandardMaterial color="#040914" roughness={0.4} metalness={0.6} />
       </mesh>
 
-      {/* Subtle architectural floor grid */}
+      {/* Subtle floor grid lines */}
       <gridHelper args={[90, 45, '#0B1320', '#061120']} position={[0, 0.01, 0]} />
 
       {/* Entrance driveway */}
@@ -197,19 +193,6 @@ export default function SapphireArchitecturalResort({ onLoaded }: SapphireArchit
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
           <ringGeometry args={[1.0, 1.4, 24]} />
           <meshBasicMaterial color="#D4AF37" />
-        </mesh>
-      </group>
-
-
-      {/* ═══════ 9. WATER FOUNTAIN ═══════ */}
-      <group position={[0, 0, 11]}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
-          <circleGeometry args={[3.2, 24]} />
-          <meshStandardMaterial color="#123B70" roughness={0.1} metalness={0.9} />
-        </mesh>
-        <mesh ref={fountainRef} position={[0, 0.7, 0]}>
-          <cylinderGeometry args={[0.08, 0.03, 1.4, 8]} />
-          <meshStandardMaterial color="#387BCB" transparent opacity={0.7} />
         </mesh>
       </group>
 
