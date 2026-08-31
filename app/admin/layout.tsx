@@ -20,8 +20,7 @@ import {
   Bell,
   ChevronDown,
   Menu,
-  X,
-  Globe
+  X
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -43,9 +42,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="min-h-screen w-full bg-[#F8FAFC] text-[#0B172A] flex flex-col lg:flex-row font-sans selection:bg-[#0A172C] selection:text-[#FFFFFF]">
+    <div className="min-h-screen lg:h-screen w-full bg-[#F8FAFC] text-[#0B172A] flex flex-col lg:flex-row font-sans selection:bg-[#0A172C] selection:text-[#FFFFFF]">
       
-      {/* ═══════ 1. DESKTOP PERMANENT SIDEBAR ═══════ */}
+      {/* ═══════ 1. DESKTOP PERMANENT SIDEBAR (lg and above) ═══════ */}
       <aside className="hidden lg:flex w-64 bg-[#0A172C] border-r border-[#0A172C] flex-col justify-between shrink-0 h-screen sticky top-0 z-30 shadow-xl text-white">
         <div className="flex flex-col">
           <div className="p-6 border-b border-white/10">
@@ -106,8 +105,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
 
-      {/* ═══════ 2. MOBILE TOP STICKY BAR ═══════ */}
-      <div className="lg:hidden sticky top-0 left-0 right-0 bg-[#0A172C] text-white z-40 border-b border-[#0A172C] px-4 py-3 flex items-center justify-between shadow-md">
+      {/* ═══════ 2. MOBILE STICKY TOP BAR (< lg) ═══════ */}
+      <div className="lg:hidden sticky top-0 left-0 right-0 bg-[#0A172C] text-white z-40 border-b border-[#0A172C] px-4 py-3 flex items-center justify-between shadow-md shrink-0">
         <Link href="/" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-white text-[#0A172C] font-serif font-bold text-sm flex items-center justify-center shadow">
             S
@@ -118,19 +117,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </Link>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setMobileSidebarOpen(true)}
-            className="px-3.5 py-1.5 rounded-xl bg-white text-[#0A172C] font-bold text-xs flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
-          >
-            <Menu className="w-4 h-4 text-[#0A172C]" />
-            <span>MENU</span>
-          </button>
-        </div>
+        <button
+          onClick={() => setMobileSidebarOpen(true)}
+          className="px-3.5 py-1.5 rounded-xl bg-white text-[#0A172C] font-bold text-xs flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+        >
+          <Menu className="w-4 h-4 text-[#0A172C]" />
+          <span>MENU</span>
+        </button>
       </div>
 
 
-      {/* ═══════ 3. MOBILE QUICK HORIZONTAL MODULE NAV ═══════ */}
+      {/* ═══════ 3. MOBILE QUICK HORIZONTAL MODULE NAV (< lg) ═══════ */}
       <div className="lg:hidden bg-white border-b border-[#CBD5E1] px-3 py-2 overflow-x-auto no-scrollbar flex items-center gap-2 shrink-0 z-30">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -138,7 +135,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link
               key={item.href}
               href={item.href}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all shrink-0 ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
                 isActive
                   ? 'bg-[#0A172C] text-white shadow-sm'
                   : 'bg-[#F8FAFC] text-[#475569] border border-[#CBD5E1]'
@@ -154,13 +151,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* ═══════ 4. MOBILE SLIDE-OUT DRAWER MODAL ═══════ */}
       {mobileSidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-[9999] flex">
-          {/* Touch Backdrop */}
           <div 
             className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
             onClick={() => setMobileSidebarOpen(false)}
           />
 
-          {/* Sliding Drawer Container */}
           <div className="relative w-80 max-w-[85vw] bg-[#0A172C] text-white flex flex-col justify-between z-[10000] h-full shadow-2xl animate-in slide-in-from-left duration-300">
             <div className="flex flex-col">
               <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#07111F]">
@@ -222,9 +217,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
 
       {/* ═══════ 5. MAIN SAAS WORKSPACE ═══════ */}
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 w-full lg:h-full overflow-hidden">
         
-        {/* Top Desktop/Laptop Header Bar */}
+        {/* Desktop Header Bar */}
         <header className="hidden lg:flex h-16 bg-white border-b border-[#CBD5E1] px-6 items-center justify-between shrink-0 shadow-sm gap-4 z-20">
           <div className="relative max-w-md w-full">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#667085]" />
@@ -253,8 +248,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        {/* Dynamic SaaS Page Workspace */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-8 bg-[#F8FAFC] no-scrollbar">
+        {/* Dynamic SaaS Workspace Content */}
+        <main className="flex-1 w-full lg:overflow-y-auto p-4 sm:p-8 bg-[#F8FAFC] no-scrollbar">
           {children}
         </main>
 
